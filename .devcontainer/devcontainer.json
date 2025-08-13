@@ -1,45 +1,71 @@
 {
-	"name": "Code - OSS",
-
-	"dockerFile": "base.Dockerfile",
-	// Uncomment this line and comment out the "image" to iterate on the container
-	// "image": "mcr.microsoft.com/vscode/devcontainers/repos/microsoft/vscode:dev",
-
-	"workspaceMount": "source=${localWorkspaceFolder},target=/home/node/workspace/vscode,type=bind,consistency=cached",
-	"workspaceFolder": "/home/node/workspace/vscode",
-	"overrideCommand": false,
-	"runArgs": [ "--init", "--security-opt", "seccomp=unconfined" ],
-
-	// Configure tool-specific properties.
-	"customizations": {
-		// Configure properties specific to VS Code.
-		"vscode": {
-			// Set *default* container specific settings.json values on container create.
-			"settings": { 
-				// zsh is also available
-				// "terminal.integrated.defaultProfile.linux": "zsh",
-				"resmon.show.battery": false,
-				"resmon.show.cpufreq": false,
-				"remote.extensionKind": {
-					"ms-vscode.js-debug-nightly": "workspace",
-					"msjsdiag.debugger-for-chrome": "workspace"
-				},
-				"debug.chrome.useV3": true
-			},
-			
-			// Add the IDs of extensions you want installed when the container is created.
-			"extensions": [
-				"dbaeumer.vscode-eslint",
-				"EditorConfig.EditorConfig",
-				"msjsdiag.debugger-for-chrome",
-				"mutantdino.resourcemonitor",
-				"GitHub.vscode-pull-request-github"
-			]
-		}
-	},
-
-	// noVNC, VNC ports
-	"forwardPorts": [6080, 5901],
-
-	"remoteUser": "node"
+    "id": "desktop-lite",
+    "version": "1.2.7",
+    "name": "Light-weight Desktop",
+    "documentationURL": "https://github.com/devcontainers/features/tree/main/src/desktop-lite",
+    "description": "Adds a lightweight Fluxbox based desktop to the container that can be accessed using a VNC viewer or the web. GUI-based commands executed from the built-in VS code terminal will open on the desktop automatically.",
+    "options": {
+        "version": {
+            "type": "string",
+            "proposals": [
+                "latest"
+            ],
+            "default": "latest",
+            "description": "Currently Unused!"
+        },
+        "noVncVersion": {
+            "type": "string",
+            "proposals": [
+                "1.6.0"
+            ],
+            "default": "1.6.0",
+            "description": "The noVNC version to use"
+        },
+        "password": {
+            "type": "string",
+            "proposals": [
+                "vscode",
+                "codespaces",
+                "password",
+                "noPassword"
+            ],
+            "default": "vscode",
+            "description": "Enter a password for desktop connections. If \"noPassword\", connections from the local host can be established without entering a password"
+        },
+        "webPort": {
+            "type": "string",
+            "proposals": [
+                "6080"
+            ],
+            "default": "6080",
+            "description": "Enter a port for the VNC web client (noVNC)"
+        },
+        "vncPort": {
+            "type": "string",
+            "proposals": [
+                "5901"
+            ],
+            "default": "5901",
+            "description": "Enter a port for the desktop VNC server (TigerVNC)"
+        }
+    },
+    "init": true,
+    "entrypoint": "/usr/local/share/desktop-init.sh",
+    "containerEnv": {
+        "DISPLAY": ":1"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "github.copilot.chat.codeGeneration.instructions": [
+                    {
+                        "text": "This dev container includes a lightweight Fluxbox based desktop that can be accessed using a VNC viewer or the web. GUI-based commands executed from the built-in VS Code terminal will open on the desktop automatically."
+                    }
+                ]
+            }
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ]
 }
